@@ -3,45 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
-	"path/filepath"
 
 	batchv1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
 )
-
-// ConnectToCluster connects to a Kubernetes cluster, either from inside a pod or locally.
-func ConnectToCluster() (*kubernetes.Clientset, error) {
-	var config *rest.Config
-	var err error
-
-	// Check if we're inside a Kubernetes pod
-	if _, inCluster := os.LookupEnv("KUBERNETES_SERVICE_HOST"); inCluster {
-		config, err = rest.InClusterConfig()
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		// If not in a pod, use the local kubeconfig file
-		home := os.Getenv("HOME")
-		kubeconfig := filepath.Join(home, ".kube", "config")
-		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	// Create the Kubernetes clientset
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		return nil, err
-	}
-
-	return clientset, nil
-}
 
 // GetJobs lists all jobs in the specified namespace.
 func GetJobs(clientset *kubernetes.Clientset, namespace string) {
@@ -100,12 +66,13 @@ func main() {
 	// Example: Get all jobs in the default namespace
 	GetJobs(clientset, namespace)
 
-	// Example: View a specific job
-	jobName := "example-job"
-	ViewJob(clientset, namespace, jobName)
+	CreateSelfExecutingJob("kokskat-job", namespace)
+	// // Example: View a specific job
+	// jobName := "example-job"
+	// ViewJob(clientset, namespace, jobName)
 
-	// Example: Delete a job
-	DeleteJob(clientset, namespace, jobName)
+	// // Example: Delete a job
+	// DeleteJob(clientset, namespace, jobName)
 
 	// You can implement job creation based on your use case
 	// Example: CreateJob(clientset, namespace, job)

@@ -1,4 +1,4 @@
-module github.com/koksmat-com/k8
+module github.com/ngjoh/kokskat-k8
 
 go 1.22.1
 
