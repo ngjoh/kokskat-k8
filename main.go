@@ -66,7 +66,7 @@ func main() {
 	// Example: Get all jobs in the default namespace
 	GetJobs(clientset, namespace)
 
-	CreateSelfExecutingJob("kokskat-job", namespace)
+	// CreateSelfExecutingJob("kokskat-job", namespace)
 	// // Example: View a specific job
 	// jobName := "example-job"
 	// ViewJob(clientset, namespace, jobName)
