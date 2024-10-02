@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 
+	"github.com/nats-io/nats.go"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -46,4 +48,17 @@ func getHomeDir() string {
 		return os.Getenv("USERPROFILE") // Windows
 	}
 	return os.Getenv("HOME") // Linux, macOS
+}
+
+// ConnectToNATS connects to a NATS server
+func ConnectToNATS() (*nats.Conn, error) {
+	natsURL := nats.DefaultURL // Or customize the URL if needed
+
+	// Establish connection to NATS
+	natsConn, err := nats.Connect(natsURL)
+	if err != nil {
+		return nil, fmt.Errorf("error connecting to NATS: %v", err)
+	}
+
+	return natsConn, nil
 }
