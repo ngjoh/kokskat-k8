@@ -36,7 +36,7 @@ func CreateSelfExecutingJob(jobName, namespace string) error {
                                 echo "Installing and running Go program...";
                                 go install github.com/ngjoh/kokskat-k8@latest;
                                 echo "Running installed Go program...";
-                                /go/bin/kokskat-k8;
+                                /go/bin/kokskat-k8 showjob;
                                 echo "Job finished.";
                                 `,
 							},
